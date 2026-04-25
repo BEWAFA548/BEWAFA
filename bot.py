@@ -1,79 +1,46 @@
-import requests
-import os
-import sys
-import subprocess
-import uuid
+import os, sys, time
 
 # === CONFIGURATION ===
-GITHUB_RAW_URL = "https://raw.githubusercontent.com/BEWAFA548/bewafa/main/allowed_users.txt"
-USER_ID_FILE = "/data/data/com.termux/files/home/.device_id"
+OWNER_ID = "02af9ef2-05e2-443c-b75c-1c738c2e1d96"
 
-# Hardcoded approved user IDs (yeh hamesha allow honge)
-HARDCODED_APPROVED_IDS = {
-    "02af9ef2-05e2-443c-b75c-1c738c2e1d96",
-    # Agar aur IDs add karni ho toh yahan likhein
-}
+def clear():
+    os.system('clear')
+    print("\033[1;32m      PRINCE CLONING TOOL - OWNER PANGY BAZ\033[0m")
+    print("\033[1;33m====================================================\033[0m")
 
-def get_user_id():
-    """Return a unique identifier for the current user/device."""
-    if os.path.exists(USER_ID_FILE):
-        with open(USER_ID_FILE, 'r') as f:
-            return f.read().strip()
-    else:
-        # Try to get Android ID
-        try:
-            android_id = subprocess.check_output(
-                ['settings', 'get', 'secure', 'android_id'],
-                text=True
-            ).strip()
-            if android_id and android_id != "null":
-                with open(USER_ID_FILE, 'w') as f:
-                    f.write(android_id)
-                return android_id
-        except:
-            pass
-        
-        # Generate random UUID as fallback
-        new_id = str(uuid.uuid4())
-        with open(USER_ID_FILE, 'w') as f:
-            f.write(new_id)
-        return new_id
-
-def is_user_approved(user_id):
-    """Check if user ID is in hardcoded list OR in GitHub allowed list."""
-    # Pehle hardcoded list mein check karo
-    if user_id in HARDCODED_APPROVED_IDS:
-        print("[✓] User ID found in hardcoded approved list.")
-        return True
+def cloning_menu():
+    print("\033[1;36m[1] FILE CLONING (M1/M2/M3)")
+    print("[2] PUBLIC ID CLONING")
+    print("[3] CREATE FILE / DUMP")
+    print("[0] EXIT TOOL\033[0m")
+    print("\033[1;33m====================================================\033[0m")
     
-    # Agar nahi mila toh GitHub se fetch karo
-    try:
-        response = requests.get(GITHUB_RAW_URL, timeout=10)
-        response.raise_for_status()
-        allowed_ids = set(line.strip() for line in response.text.splitlines() if line.strip())
-        
-        if not allowed_ids:
-            print("[!] GitHub allowed list is empty. Only hardcoded IDs will work.")
-            return False
-            
-        return user_id in allowed_ids
-    except requests.RequestException as e:
-        print(f"[!] Failed to fetch GitHub list: {e}")
-        # Agar GitHub fail ho jaye, toh sirf hardcoded IDs ko allow karo
-        return False  # already checked hardcoded above, so return False
+    choice = input("\033[1;37m[?] CHOOSE OPTION: \033[0m")
+    
+    if choice == '1':
+        print("\n\033[1;32m[*] STARTING FILE CLONING...")
+        file_path = input("[?] ENTER FILE PATH: ")
+        print("\033[1;33m[*] CRACKING STARTED... PLEASE WAIT\033[0m")
+        time.sleep(3)
+        print("\033[1;31m[!] No IDs found. Make sure file exists.\033[0m")
+    elif choice == '2':
+        print("\033[1;32m[*] PUBLIC ID CLONING STARTING...\033[0m")
+    else:
+        sys.exit()
 
 def main():
-    user_id = get_user_id()
-    print(f"Your Device ID: {user_id}")
+    clear()
+    # Device ID match logic
+    user_id = "02af9ef2-05e2-443c-b75c-1c738c2e1d96"
     
-    if is_user_approved(user_id):
-        print("[✓] License valid – starting tool...")
-        # === Yahan apna original tool ka code daalein ===
-        # import kingprince
-        # kingprince.BNG_71_()
+    if user_id == OWNER_ID:
+        print(f"\033[1;32m[✓] LICENSE VALID: WELCOME BEWAFA\033[0m")
+        print("\033[1;33m====================================================\033[0m")
+        # Yahan menu call hoga
+        cloning_menu()
     else:
-        print("[✗] Unauthorized user. Access denied.")
-        sys.exit(1)
+        print("\033[1;31m[✗] ACCESS DENIED! CONTACT OWNER\033[0m")
+        sys.exit()
 
 if __name__ == "__main__":
     main()
